@@ -1,0 +1,94 @@
+/* PurchaseTable.jsx styles */
+.purchase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.purchase-header-title {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.purchase-search {
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  min-width: 120px;
+  margin-left: 40px;
+}
+
+.purchase-add-btn {
+  border: 1px solid grey;
+  background-color: grey;
+  color: white;
+  width: 140px;
+  text-align: center;
+  border-radius: 7px;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* NewPurchase.jsx styles */
+.purchase-bg {
+  background: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.purchase-card {
+  background: #fff;
+  color: #333;
+  width: 400px;
+}
+
+.purchase-title {
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.purchase-cancel {
+  margin-left: 0px;
+  font-size: 23px;
+  margin-top: -10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.purchase-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.purchase-col {
+  flex: 1;
+}
+
+.purchase-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: white;
+  color: black;
+}
+
+.purchase-submit {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: #444;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}

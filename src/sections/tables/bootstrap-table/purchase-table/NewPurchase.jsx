@@ -1,6 +1,7 @@
 import MainCard from 'components/MainCard';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Purchase.css';
 
 export default function NewOrder() {
   const [form, setForm] = useState({
@@ -60,44 +61,48 @@ export default function NewOrder() {
  }
 
   return (
-    <div style={{ background: '#f5f5f5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <MainCard title={<span style={{ color: '#333',fontWeight:"bold" ,fontSize:"18px"}}>Add New Order <button onClick={handleCancel}   style={{marginLeft:"500px", fontSize:"23px",marginTop:"-60px",border:"none"}}>✖</button></span>  }   style={{ background: '#fff', color: '#333', width: '400px' }}> 
-
+    <div className="purchase-bg">
+      <MainCard
+        title={
+          <span className="purchase-title">
+            Add New Order
+            <button onClick={handleCancel} className="purchase-cancel">✖</button>
+          </span>
+        }
+        className="purchase-card"
+      >
         <form onSubmit={handleSubmit}>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="purchase-row">
+            <div className="purchase-col">
               <label>Purchase_Order</label>
-              <input name="PurchaseOrder" value={form.PurchaseOrder} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="PurchaseOrder" value={form.PurchaseOrder} onChange={handleChange} className="purchase-input" />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="purchase-col">
               <label>Sales_Id</label>
-              <input name="SalesId" value={form.SalesId} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="SalesId" value={form.SalesId} onChange={handleChange} className="purchase-input" />
             </div>
           </div>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="purchase-row">
+            <div className="purchase-col">
               <label>Date</label>
-              <input name="Date" value={form.Date} onChange={handleChange} type="number" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="Date" value={form.Date} onChange={handleChange} type="number" className="purchase-input" />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="purchase-col">
               <label>Delivery_Date</label>
-              <input name="DeliveryDate" value={form.DeliveryDate} onChange={handleChange} type="date" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="DeliveryDate" value={form.DeliveryDate} onChange={handleChange} type="date" className="purchase-input" />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="purchase-row">
+            <div className="purchase-col">
               <label>Status</label>
-              <input name="Status" value={form.Status} onChange={handleChange} placeholder="Delivery Deadline" type="date" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="Status" value={form.Status} onChange={handleChange} placeholder="Delivery Deadline" type="date" className="purchase-input" />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="purchase-col">
               <label>Total_Amount</label>
-              <input name="TotalAmount" value={form.TotalAmount} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="TotalAmount" value={form.TotalAmount} onChange={handleChange} className="purchase-input" />
             </div>
           </div>
-          
-          <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '8px', background: '#444', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1rem' }}>Submit Order</button>
+          <button type="submit" className="purchase-submit">Submit Order</button>
         </form>
       </MainCard>
     </div>

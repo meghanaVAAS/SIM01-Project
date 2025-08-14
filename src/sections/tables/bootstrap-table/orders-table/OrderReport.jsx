@@ -1,3 +1,4 @@
+import './Order.css';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MainCard from 'components/MainCard';
@@ -19,7 +20,7 @@ export default function OrderReport() {
     return (
       <MainCard title="Order Report">
         <div>Loading or order not found.</div>
-        <button onClick={() => navigate(-1)} style={{marginTop: '20px'}}>Back</button>
+        <button className="order-report-back-btn" onClick={() => navigate(-1)}>Back</button>
       </MainCard>
     );
   }
@@ -29,14 +30,13 @@ export default function OrderReport() {
       <Table bordered>
         <tbody>
           <tr><th>OrderId</th><td>{order.OrderId}</td></tr>
-          <tr><th>ProductId</th><td>{order.ProductId}</td></tr>
-          <tr><th>QuantityOrdered</th><td>{order.QuantityOrdered}</td></tr>
           <tr><th>OrderDate</th><td>{order.OrderDate}</td></tr>
-          <tr><th>DeliveryDeadline</th><td>{order.DeliveryDeadline}</td></tr>
           <tr><th>CustomerName</th><td>{order.CustomerName}</td></tr>
+          <tr><th>ProductID</th><td>{order.ProductID}</td></tr>
+          <tr><th>QuantityOrdered</th><td>{order.QuantityOrdered}</td></tr>
         </tbody>
       </Table>
-      <button onClick={() => navigate(-1)} style={{marginTop: '20px'}}>Back</button>
+      <button className="order-report-back-btn" onClick={() => navigate(-1)}>Back</button>
     </MainCard>
   );
 }

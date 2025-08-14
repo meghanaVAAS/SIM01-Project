@@ -1,0 +1,29 @@
+.supplier-status-active {
+  color: green;
+}
+.supplier-status-inactive {
+  color: red;
+}
+.supplier-view-report-btn {
+  padding: 0.3rem 0.7rem;
+  font-weight: bold;
+  border-radius: 4px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.supplier-details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.supplier-details-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+.supplier-details-table tr:last-child td {
+  border-bottom: none;
+}
+.supplier-details-label {
+  font-weight: bold;
+}

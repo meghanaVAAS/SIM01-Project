@@ -1,16 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-
-// react-bootstrap
-import Image from 'react-bootstrap/Image';
-
-// third-party
-
-// project-imports
 import DrawerContent from './DrawerContent';
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
-// assets
-import logo from 'assets/images/logo-white.svg';
 
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 
@@ -42,11 +33,16 @@ export default function MainDrawer() {
   return (
     <nav id="pc-sidebar" className={`pc-sidebar ${drawerOpen ? 'pc-sidebar-hide mob-sidebar-active' : ''} `}>
       <div className="navbar-wrapper">
+
+
         <div className="m-header">
           <a className="b-brand text-primary">
-            <Image src={logo} fluid className="logo logo-lg" alt="logo" />
+            {/* <img src={logo} fluid className="logo logo-lg" alt="logo" /> */}
+            <img src="/logoicon.svg" className="logo logo-lg" alt="logo" />
           </a>
         </div>
+
+        
 
         <div className="navbar-content">
           <DrawerContent selectedItems={selectedItems} setSelectedItems={setSelectedItems} />

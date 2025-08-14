@@ -12,10 +12,7 @@ import OtherRoutes from './OtherRoutes';
 // ==============================|| ROUTING RENDER ||============================== //
 
 const router = createBrowserRouter(
-  [NavigationRoutes, ComponentsRoutes, FormsRoutes, TablesRoutes, ChartMapRoutes, PagesRoutes, OtherRoutes],
-  {
-    basename: import.meta.env.VITE_APP_BASE_NAME
-  }
+  [NavigationRoutes, ComponentsRoutes, FormsRoutes, TablesRoutes, ChartMapRoutes, PagesRoutes, OtherRoutes]
 );
 
 export default router;

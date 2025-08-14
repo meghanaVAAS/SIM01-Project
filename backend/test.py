@@ -21,15 +21,37 @@
 #     allow_headers=["*"],  # Allows all headers
 # )
 
-# @app.get("/products")
-# async def get_products():
-#     return [{"name": "Product 1"}, {"name": "Product 2"}]
+# 
+
+
+
+
+# @app.get("/orders/{orderid}")
+# async def get_order(orderid: str):
+#     if orderid == "12345":
+#         return {"message": "Order found"}
+#     elif orderid != "12345":
+#         return {"message": "Order not found"}
+#     return {"message": "Invalid order ID"}
+
+
+
+
+
+
+#   const generateOrderId = () =>{
+#     return 'ORD-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+#   };
+#   // const generateOrderId = () => {
+#   //   const digits = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join("");
+#   //   return 'ORD-' + digits;
+#   // };
+
 
 from fastapi import FastAPI
 
 app = FastAPI()
 
-
 @app.get('/')
-def root():
-    return("hello world")
+def read_root():
+    return {"message":"heloo world"}

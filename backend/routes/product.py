@@ -16,6 +16,9 @@ def get_products():
 @router.post("/products", response_model=Products)
 def add_product(product: Products):
     prod_dict = product.dict()
+    # Check for duplicate ProductID
+    if collection.find_one({"ProductID": prod_dict["ProductID"]}):
+        raise HTTPException(status_code=400, detail="ProductID already exists")
     collection.insert_one(prod_dict)
     return prod_dict
 

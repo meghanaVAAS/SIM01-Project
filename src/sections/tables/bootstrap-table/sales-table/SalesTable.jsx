@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import MainCard from "components/MainCard";
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import './Sales.css';
 
 export default function SalesTable() {
   const [salesdata, setSalesdata] = useState([]);
@@ -40,7 +41,8 @@ export default function SalesTable() {
   }, []);
 
   const filteredSales = salesdata.filter(sale =>
-    (sale.Product_Name || '').toLowerCase().includes(search.toLowerCase())
+    (sale.Product_Name || '').toLowerCase().includes(search.toLowerCase()) ||
+    (sale.Sales_ID ? sale.Sales_ID.toString().toLowerCase().includes(search.toLowerCase()) : false)
   );
 
   const handleNewSalesClick = () => {
@@ -57,16 +59,16 @@ export default function SalesTable() {
 
   return (
     <MainCard title={selectedSales ? `Sales Details: ${selectedSales.Sales_ID}` : (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{fontWeight:"bold",fontSize:"25px"}}>Sales</span>
+      <div className="sales-header-row">
+        <span className="sales-header-title">Sales</span>
         <input
           type="text"
           placeholder="Search...."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          style={{ padding: '5px 10px', borderRadius: '15px', border: '1px solid #ccc', minWidth: '120px', marginLeft: '40px' }}
+          className="sales-header-search"
         />
-        <button style={{border:"1px solid grey",backgroundColor:"grey",color:"white",width:"140px", textAlign:"center",borderRadius:"7px",fontSize:"17px"}} onClick={handleNewSalesClick}>New Sales</button>
+        <button className="sales-header-new-btn" onClick={handleNewSalesClick}>New Sales</button>
       </div>
     )}>
       {selectedSales ? (
@@ -99,7 +101,7 @@ export default function SalesTable() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center" }}>No purchase records for this Sales ID</td>
+                  <td colSpan="6" className="sales-table-empty">No purchase records for this Sales ID</td>
                 </tr>
               )}
             </tbody>
@@ -121,7 +123,7 @@ export default function SalesTable() {
           <tbody>
             {filteredSales.length > 0 ? (
               filteredSales.map((row) => (
-                <tr key={row.Sales_ID} style={{ cursor: 'pointer' }} onClick={() => handleSalesClick(row)}>
+                <tr key={row.Sales_ID} className="sales-table-row" onClick={() => handleSalesClick(row)}>
                   <td>{row.Sales_ID}</td>
                   <td>{row.Product_ID}</td>
                   <td>{row.Product_Name}</td>
@@ -133,7 +135,7 @@ export default function SalesTable() {
               ))
             ) : (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>No sales records available</td>
+                <td colSpan="7" className="sales-table-empty">No sales records available</td>
               </tr>
             )}
           </tbody>

@@ -1,46 +1,61 @@
 // react-bootstrap
 import Table from 'react-bootstrap/Table';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainCard from 'components/MainCard';
+import './Supplier.css';
+import { useNavigate } from 'react-router-dom';
 
 // ==============================|| SUPPLIERS TABLE PAGE ||============================== //
 
 export default function SuppliersTable() {
-  const [suppliers, setSuppliers] = useState([
-    { SupplierId: 201, supplierName: 'Tech Supplies Inc.', ContactName: 'John Doe', Phone: 'Laptop, Mouse', email :'tech@supplies.com',
-      Address:'123 Tech Lane', Country:'USA', Status: 'Active' },
-    { SupplierId: 202, supplierName: 'Gadget World', ContactName: 'Jane Smith', Phone: 'iPhone, Product A', email :'tech@supplies.com ',
-      Address:'456 Gadget Ave', Country:'USA', Status: 'Inactive' },
-    { SupplierId: 203, supplierName: 'OfficeMart', ContactName: 'Bob Johnson', Phone: 'Product d', email :'tech@supplies.com',
-      Address:'789 Office Blvd', Country:'USA', Status: 'Active' },
-  ]);
+  const [suppliers, setSuppliers] = useState([]);
+  // Fetch suppliers data
+  useEffect(() => {
+    fetch('http://localhost:8000/suppliers')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Fetched suppliers data:', data);
+        setSuppliers(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => console.error('Failed to fetch suppliers:', err));
+  }, []);
+  
+  const navigate = useNavigate();
+  const handleViewReport = (supplierId) => {
+    navigate(`/tables/bootstrap-table/supplier-table/${supplierId}`);
+  };
 
   return (
-    <MainCard title="Suppliers Table">
+    <MainCard title={<span style={{ fontWeight: 'bold', fontSize: '25px'}}>Suppliers Table</span>} >
       <Table responsive>
         <thead>
           <tr>
-            <th>SupplierId</th>
-            <th>Supplier Name</th>
-            <th>Contact Name</th>
-            <th>Phone</th>
-            <th>email</th>
-            <th>Address</th>
-            <th>Country</th>
-            <th>Status</th>
+              <th>SupplierID</th>
+              <th>SupplierName</th>
+              <th>ContactName</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Report</th>
           </tr>
         </thead>
         <tbody>
           {suppliers.map(supplier => (
-            <tr key={supplier.SupplierId}>
-              <td>{supplier.SupplierId}</td>
-              <td>{supplier.supplierName}</td>
-              <td>{supplier.ContactName}</td>
+            <tr key={supplier.Supplier_ID}>
+              <td>{supplier.Supplier_ID}</td>
+              <td>{supplier.Supplier_Name}</td>
+              <td>{supplier.Contact_Name}</td>
               <td>{supplier.Phone}</td>
-              <td>{supplier.email}</td>
+              <td>{supplier.Email}</td>
               <td>{supplier.Address}</td>
-              <td>{supplier.Country}</td>
-              <td style={{ color: supplier.Status === 'Active' ? 'green' : supplier.Status === 'Inactive' ? 'red' : 'inherit' }}>{supplier.Status}</td>
+              <td>
+                <button
+                  className="supplier-view-report-btn"
+                  onClick={() => handleViewReport(supplier.Supplier_ID)}
+                >
+                  View Report
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

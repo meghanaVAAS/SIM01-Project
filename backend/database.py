@@ -12,3 +12,9 @@ def get_database():
 
 # Create a db object for import in other modules
 db = get_database()
+# Ensure unique index on OrderId for Orders collection
+try:
+    db["Orders"].create_index("OrderId", unique=True)
+    db["Products"].create_index("ProductID", unique=True)
+except Exception as e:
+    print(f"Index creation failed: {e}")

@@ -26,12 +26,7 @@ export default function Footer() {
           {/* Footer Links */}
           <Col xs="auto" className="my-1">
             <Stack direction="horizontal" gap={3} className="justify-content-center">
-              <Nav.Link className="p-0" as="a" href="/">
-                Home
-              </Nav.Link>
-              <Nav.Link className="p-0" as="a" href="https://codedthemes.gitbook.io/datta" target="_blank" rel="noopener noreferrer">
-                Documentation
-              </Nav.Link>
+              {/* Home and Documentation links removed */}
               {/* <Nav.Link className="p-0" as="a" href="https://codedthemes.support-hub.io/" target="_blank" rel="noopener noreferrer">
                 Support
               </Nav.Link> */}

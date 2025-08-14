@@ -1,6 +1,8 @@
+
+import React, { useState } from 'react';
 import MainCard from 'components/MainCard';
-import { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import './RawMaterial.css';
 
 export default function NewRawMaterial() {
   const [form, setForm] = useState({
@@ -9,9 +11,15 @@ export default function NewRawMaterial() {
     RawMaterial_Name: '',
     unit_of_Measure: '',
     Stock_Quantity: '',
-    Price_Unit: '',
-    Supplier: ''
+    SupplierId: ''
   });
+  const [products, setProducts] = useState([]);
+  React.useEffect(() => {
+    fetch('http://localhost:8000/products')
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(() => setProducts([]));
+  }, []);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,8 +38,7 @@ export default function NewRawMaterial() {
       RawMaterial_Name: form.RawMaterial_Name,
       unit_of_Measure: form.unit_of_Measure,
       Stock_Quantity: form.Stock_Quantity ? parseInt(form.Stock_Quantity, 10) : undefined,
-      Price_Unit: form.Price_Unit ? parseFloat(form.Price_Unit) : undefined,
-      Supplier: form.Supplier
+      SupplierId: form.SupplierId
     };
     try {
       const res = await fetch('http://localhost:8000/raw-materials', {
@@ -57,48 +64,56 @@ const  handleCancel =() => {
 }
 
   return (
-    <div style={{ background: '#f5f5f5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <MainCard title={<span style={{ color: '#333',fontWeight:"bold" ,fontSize:"18px"}}>Add New RawMaterial <button  onClick={handleCancel} style={{marginLeft:"500px", fontSize:"23px",marginTop:"-60px",border:"none"}}>✖</button></span>  }   style={{ background: '#fff', color: '#333', width: '400px' }}> 
-
+    <div className="rawmaterial-bg">
+      <MainCard
+        title={
+          <span className="rawmaterial-title">
+            Add New RawMaterial
+            <button onClick={handleCancel} className="rawmaterial-cancel">✖</button>
+          </span>
+        }
+        className="rawmaterial-card"
+      >
         <form onSubmit={handleSubmit}>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="rawmaterial-row">
+            <div className="rawmaterial-col">
               <label>RawMaterial_ID</label>
-              <input name="RawMaterial_ID" value={form.RawMaterial_ID} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="RawMaterial_ID" value={form.RawMaterial_ID} onChange={handleChange} className="rawmaterial-input" />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="rawmaterial-col">
               <label>Product_ID</label>
-              <input name="Product_ID" value={form.Product_ID} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <select name="Product_ID" value={form.Product_ID} onChange={handleChange} className="rawmaterial-input">
+                <option value=""></option>
+                {products.map(product => (
+                  <option key={product.ProductID} value={product.ProductID}>
+                    {product.ProductID}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="rawmaterial-row">
+            <div className="rawmaterial-col">
               <label>RawMaterial_Name</label>
-              <input name="RawMaterial_Name" value={form.RawMaterial_Name} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="RawMaterial_Name" value={form.RawMaterial_Name} onChange={handleChange} className="rawmaterial-input" />
             </div>
-            <div style={{ flex: 1 }}>
+            <div className="rawmaterial-col">
               <label>unit_of_Measure</label>
-              <input name="unit_of_Measure" value={form.unit_of_Measure} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="unit_of_Measure" value={form.unit_of_Measure} onChange={handleChange} className="rawmaterial-input" />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div className="rawmaterial-row">
+            <div className="rawmaterial-col">
               <label>Stock_Quantity</label>
-              <input name="Stock_Quantity" value={form.Stock_Quantity} onChange={handleChange} type="number" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+              <input name="Stock_Quantity" value={form.Stock_Quantity} onChange={handleChange} type="number" className="rawmaterial-input" />
             </div>
-            <div style={{ flex: 1 }}>
-              <label>Price_Unit</label>
-              <input name="Price_Unit" value={form.Price_Unit} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+            <div className="rawmaterial-col">
+              <label>SupplierId</label>
+              <input name="SupplierId" value={form.SupplierId} onChange={handleChange} className="rawmaterial-input" />
             </div>
           </div>
-          <div>
-            <label>Supplier</label>
-            <input name="Supplier" value={form.Supplier} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
-          </div>
-         
-          <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '8px', background: '#444', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1rem' }}>Submit</button>
+          <br /><br />
+          <button type="submit" className="rawmaterial-submit">Submit</button>
         </form>
       </MainCard>
     </div>

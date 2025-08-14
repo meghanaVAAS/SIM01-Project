@@ -270,7 +270,8 @@
   }
 
   .pc-arrow {
-    float: right;
+
+    // float: right;
     display: inline-block;
     transition: all 0.2s ease-in-out;
 
@@ -301,11 +302,19 @@
     align-items: center;
     padding: 16px 24px;
     background: var(--pc-logo-bg);
-
+  }
+  .logo {
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
+  .logo-lg {
+    width: 48px;
+    height: 48px;
+  }
     .logo-sm {
       display: none;
     }
-  }
 
   .navbar-content {
     position: relative;
@@ -406,6 +415,7 @@
   }
 }
 
-// ============================
-//    3. Sidebar css end
-// ============================
+.logo,
+.logo-lg {
+  margin-bottom: -8px;
+}

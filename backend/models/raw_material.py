@@ -6,5 +6,4 @@ class RawMaterials(BaseModel):
     RawMaterial_Name: str
     unit_of_Measure: str
     Stock_Quantity: int
-    Price_Unit: float
-    Supplier: str
+    SupplierId: str

@@ -1,8 +1,8 @@
-
 import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
 import MainCard from 'components/MainCard';
 import { useNavigate } from 'react-router-dom';
+import './Order.css';
 
 // ==============================|| ORDERS TABLE PAGE ||============================== //
 
@@ -12,15 +12,32 @@ export default function OrdersTable() {
     fetch('http://localhost:8000/orders')
       .then(res => res.json())
       .then(data => {
-        // Map backend fields to UI fields if needed
-        const mapped = data.map(order => ({
-          OrderId: order.OrderId,
-          ProductId: order.ProductId,
-          QuantityOrdered: order.QuantityOrdered || 0,
-          OrderDate: order.OrderDate || '',
-          DeliveryDeadline: order.DeliveryDeadline || '',
-          CustomerName: order.CustomerName || '',
-        }));
+        // Flatten each order's products into separate rows
+        const mapped = [];
+        data.forEach(order => {
+          if (Array.isArray(order.Products) && order.Products.length > 0) {
+            order.Products.forEach(product => {
+              mapped.push({
+                OrderId: order.OrderId,
+                ProductID: product.ProductID, // <-- match backend
+                QuantityOrdered: product.QuantityOrdered,
+                OrderDate: order.OrderDate || '',
+                // ...existing code...
+                CustomerName: order.CustomerName || '',
+              });
+            });
+          } else {
+            // If no products, show order row with empty product fields
+            mapped.push({
+              OrderId: order.OrderId,
+              ProductID: '',
+              QuantityOrdered: '',
+              OrderDate: order.OrderDate || '',
+              // ...existing code...
+              CustomerName: order.CustomerName || '',
+            });
+          }
+        });
         setOrders(mapped);
       })
       .catch(() => setOrders([]));
@@ -36,44 +53,44 @@ export default function OrdersTable() {
   };
   return (
     <MainCard title={
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{fontWeight:"bold",fontSize:"25px"}}>Orders</span>
-          <input
-            type="text"
-            placeholder="Search...."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{ padding: '5px 10px', borderRadius: '15px', border: '1px solid #ccc', minWidth: '120px', marginLeft: '40px' }}
-          />
-          <button style={{border:"1px solid grey",backgroundColor:"grey",color:"white",width:"140px", textAlign:"center",borderRadius:"7px",fontSize:"17px"}} onClick={handleNewOrderClick}>New Orders</button>
-        </div>
+      <div className="order-header-row">
+        <span className="order-header-title">Orders</span>
+        <input
+          type="text"
+          placeholder="Search...."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="order-header-search"
+        />
+        <button className="order-header-new-btn" onClick={handleNewOrderClick}>New Orders</button>
+      </div>
         
       }
     >
       <Table responsive>
         <thead>
           <tr>
+            <th>SerialNo</th>
             <th>OrderId</th>
-            <th>ProductId</th>
-            <th>QuantityOrdered</th>
             <th>OrderDate</th>
-            <th>DeliveryDeadline</th>
             <th>CustomerName</th>
+            <th>ProductID</th>
+            <th>QuantityOrdered</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {filteredOrders.map(order => (
-            <tr key={order.OrderId}>
+          {filteredOrders.map((order, idx) => (
+            <tr key={order.OrderId + '-' + order.ProductID}>
+              <td>{idx + 1}</td>
               <td>{order.OrderId}</td>
-              <td>{order.ProductId}</td>
-              <td>{order.QuantityOrdered}</td>
               <td>{order.OrderDate}</td>
-              <td>{order.DeliveryDeadline}</td>
               <td>{order.CustomerName}</td>
+              <td>{order.ProductID}</td>
+              <td>{order.QuantityOrdered}</td>
               <td>
                 <button
-                  style={{border:"1px solid #007bff", backgroundColor:"#007bff", color:"white", borderRadius:"5px", padding:"5px 12px", cursor:"pointer"}}
+                  className="order-table-btn"
                   onClick={() => {
                     navigate(`/tables/bootstrap-table/orders-table/report/${order.OrderId}`);
                   }}
@@ -94,82 +111,3 @@ export default function OrdersTable() {
 
 
 
-
-// import Table from 'react-bootstrap/Table';
-// import React, { useState, useEffect } from 'react';
-// import MainCard from 'components/MainCard';
-// import { useNavigate } from 'react-router-dom';
-
-// // ==============================|| ORDERS TABLE PAGE ||============================== //
-
-// export default function OrdersTable() {
-//   const [orders, setOrders] = useState([]);
-//   useEffect(() => {
-//     fetch('http://localhost:8000/orders')
-//       .then(res => res.json())
-//       .then(data => {
-//         // Map backend fields to UI fields if needed
-//         const mapped = data.map(order => ({
-//           OrderId: order.OrderId,
-//           ProductId: order.ProductId,
-//           QuantityOrdered: order.QuantityOrdered || 0,
-//           OrderDate: order.OrderDate || '',
-//           DeliveryDeadline: order.DeliveryDeadline || '',
-//           CustomerName: order.CustomerName || '',
-//         }));
-//         setOrders(mapped);
-//       })
-//       .catch(() => setOrders([]));
-//   }, []);
-//   const [search, setSearch] = useState("");
-//   const filteredOrders = orders.filter(order =>
-//     (order.OrderId || '').toLowerCase().includes(search.toLowerCase())
-//   );
-
-//   const navigate = useNavigate();
-//   const handleNewOrderClick = () => {
-//     navigate('/tables/bootstrap-table/orders-table/new');
-//   };
-//   return (
-//     <MainCard title={
-//         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-//           <span style={{fontWeight:"bold",fontSize:"25px"}}>Orders</span>
-//           <input
-//             type="text"
-//             placeholder="Search...."
-//             value={search}
-//             onChange={e => setSearch(e.target.value)}
-//             style={{ padding: '5px 10px', borderRadius: '15px', border: '1px solid #ccc', minWidth: '120px', marginLeft: '40px' }}
-//           />
-//           <button style={{border:"1px solid grey",backgroundColor:"grey",color:"white",width:"140px", textAlign:"center",borderRadius:"7px",fontSize:"17px"}} onClick={handleNewOrderClick}>New Orders</button>
-//         </div>
-        
-//       }
-//     >
-//       <Table responsive>
-//         <thead>
-//           <tr>
-//             <th>OrderId</th>
-//             <th>ProductId</th>
-//             <th>QuantityOrdered</th>
-//             <th>OrderDate</th>
-//             <th>DeliveryDeadline</th>
-//             <th>CustomerName</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {filteredOrders.map(order => (
-//             <tr key={order.OrderId}>
-//               <td>{order.OrderId}</td>
-//               <td>{order.ProductId}</td>
-//               <td>{order.QuantityOrdered}</td>
-//               <td>{order.OrderDate}</td>
-//               <td>{order.DeliveryDeadline}</td>
-//               <td>{order.CustomerName}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </Table>
-//     </MainCard>
-//   );
-// }

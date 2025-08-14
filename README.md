@@ -1,2 +1,2 @@
-# datta-able-react-hook-reactstrap-ts
-Typescript version of Datta React
+# Smart Inventory Management System
+Welcome to the Smart Inventory Management System

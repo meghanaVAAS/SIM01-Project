@@ -46,6 +46,13 @@ const tableComponents = {
               type: 'item',
               icon: <i className="ph ph-shopping-cart" />, // Purchase icon
               url: '/tables/bootstrap-table/purchase-table'
+   },
+   {
+              id: 'supplier-item',
+              title: 'Suppliers',
+              type: 'item',
+              icon: <i className="ph ph-users" />, // Suppliers icon
+              url: '/tables/bootstrap-table/supplier-table'
    }]};
  
 export default tableComponents;

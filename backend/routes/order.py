@@ -24,5 +24,25 @@ def get_order(order_id: str):
 @router.post("/orders", response_model=Order)
 def add_order(order: Order):
     order_dict = order.dict()
-    orders_collection.insert_one(order_dict)
-    return order_dict
+    order_dict.pop("id", None)
+    # Filter out invalid products before saving
+    products = order_dict.get("Products", [])
+    valid_products = [p for p in products if p.get("ProductID")]
+    order_dict["Products"] = valid_products
+    existing_order = orders_collection.find_one({"OrderId": order_dict["OrderId"]})
+    if existing_order:
+        existing_products = existing_order.get("Products", [])
+        product_ids = {p["ProductID"] for p in existing_products}
+        for prod in valid_products:
+            if prod["ProductID"] not in product_ids:
+                existing_products.append(prod)
+        orders_collection.update_one(
+            {"OrderId": order_dict["OrderId"]},
+            {"$set": {"Products": existing_products}}
+        )
+        updated_order = orders_collection.find_one({"OrderId": order_dict["OrderId"]})
+        return order_helper(updated_order)
+    else:
+        result = orders_collection.insert_one(order_dict)
+        order_dict["_id"] = result.inserted_id
+        return order_helper(order_dict)

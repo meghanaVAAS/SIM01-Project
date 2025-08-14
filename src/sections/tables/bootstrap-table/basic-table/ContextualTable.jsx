@@ -20,21 +20,21 @@ export default function ProductTable() {
   }, []);
   const [showInsertRow, setShowInsertRow] = useState(false);
   const [rawMaterials, setRawMaterials] = useState([]);
-  const [formData, setFormData] = useState({
-    ProductID:'',
-    ProductName: '',
-    StockQuantity: '',
-    Price: '',
-    
-  });
+    const [formData, setFormData] = useState({
+      ProductID:'',
+      ProductName: '',
+      Category: '',
+      StockQuantity: '',
+      UnitPrice: '',
+    });
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    ProductID: '',
-    ProductName: '',
-    StockQuantity:'',
-    Price: '',
-   
-  });
+    const [editForm, setEditForm] = useState({
+      ProductID: '',
+      ProductName: '',
+      Category: '',
+      StockQuantity:'',
+      UnitPrice: '',
+    });
   const [search, setSearch] = useState('');
 
   const handleAddClick = () => {
@@ -43,7 +43,12 @@ export default function ProductTable() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Convert ProductID to uppercase
+    if (name === 'ProductID') {
+      setFormData((prev) => ({ ...prev, [name]: value.toUpperCase() }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleEditChange = (e) => {
@@ -53,17 +58,17 @@ export default function ProductTable() {
 
   // Handle form submission for adding a new product
     const handleSave = () => {
-    const { ProductID, ProductName, StockQuantity, Price } = formData;
-    // Correct validation: checking for non-empty fields
-    if (ProductID && ProductName && StockQuantity && Price) {
+    const { ProductID, ProductName, Category, StockQuantity, UnitPrice } = formData;
+    if (ProductID && ProductName && Category && StockQuantity && UnitPrice) {
       fetch('http://localhost:8000/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ProductID,
           ProductName,
+          Category,
           StockQuantity: parseInt(StockQuantity, 10),
-          Price: parseFloat(Price),
+          UnitPrice: parseFloat(UnitPrice),
         }),
       })
         .then(async res => {
@@ -76,7 +81,7 @@ export default function ProductTable() {
         })
         .then(newProduct => {
           setData(prev => [...prev, newProduct]);
-          setFormData({ ProductID: '', ProductName: '', StockQuantity: '', Price: '' });
+          setFormData({ ProductID: '', ProductName: '', Category: '', StockQuantity: '', UnitPrice: '' });
           setShowInsertRow(false);
         })
         .catch(err => {
@@ -88,8 +93,8 @@ export default function ProductTable() {
     }
   };
   const handleCancel = () => {
-    setFormData({ ProductID:'', ProductName: '', StockQuantity: '', Price: '' });
-    setShowInsertRow(false);
+  setFormData({ ProductID:'', ProductName: '', Category: '', StockQuantity: '', UnitPrice: '' });
+  setShowInsertRow(false);
   };
 
 
@@ -98,8 +103,9 @@ export default function ProductTable() {
     setEditForm({
       ProductID: row.ProductID,
       ProductName: row.ProductName,
+      Category: row.Category,
       StockQuantity: row.StockQuantity,
-      Price: row.Price,
+      UnitPrice: row.UnitPrice,
     });
     setEditingId(id);
   };
@@ -114,8 +120,9 @@ export default function ProductTable() {
       body: JSON.stringify({
         ProductID: editForm.ProductID,
         ProductName: editForm.ProductName,
+        Category: editForm.Category,
         StockQuantity: parseInt(editForm.StockQuantity, 10),
-        Price: parseFloat(editForm.Price),
+        UnitPrice: parseFloat(editForm.UnitPrice),
       }),
     })
       .then((res) => res.json())
@@ -187,7 +194,7 @@ export default function ProductTable() {
       {/* Search and Add Row UI always above the table */}
       {!selectedProduct && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <span style={{fontWeight:"bold",color:"#344952",fontSize:"18px"}}>Products Table</span>
+          <span style={{fontWeight:"bold",fontSize:"25px"}}>Products Table</span>
           <input
             type="text"
             placeholder="Search Product Name..."
@@ -236,16 +243,18 @@ export default function ProductTable() {
                 <tr>
                   <th>ProductID</th>
                   <th>ProductName</th>
+                  <th>Category</th>
                   <th>StockQuantity</th>
-                  <th>Price</th>
+                  <th>UnitPrice</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td style={{ cursor: 'pointer'}} onClick={() => setShowRawMaterials(true)}>{selectedProduct.ProductID}</td>
                   <td>{selectedProduct.ProductName}</td>
+                  <td>{selectedProduct.Category}</td>
                   <td>{selectedProduct.StockQuantity}</td>
-                  <td>{selectedProduct.Price}</td>
+                  <td>{selectedProduct.UnitPrice}</td>
                 </tr>
               </tbody>
             </Table>
@@ -257,8 +266,9 @@ export default function ProductTable() {
             <tr>
               <th>ProductID</th>
               <th>ProductName</th>
+              <th>Category</th>
               <th>StockQuantity</th>
-              <th>Price</th>
+              <th>UnitPrice</th>
               <th><button style={{ border: '1px solid #e7e7f7ff', background: '#e7e7f7ff', fontSize: '1.2em', cursor: 'pointer',borderRadius:'5px' }} onClick={handleAddClick} title="Add Row">New➕</button></th>
             </tr>
           </thead>
@@ -269,8 +279,9 @@ export default function ProductTable() {
                   <input type="text" name="ProductID" value={formData.ProductID} onChange={handleChange} placeholder="Product ID" />
                 </td>
                 <td><input type="text" name="ProductName" value={formData.ProductName} onChange={handleChange} placeholder="Product Name" /></td>
+                <td><input type="text" name="Category" value={formData.Category} onChange={handleChange} placeholder="Category" /></td>
                 <td><input type="number" name="StockQuantity" value={formData.StockQuantity} onChange={handleChange} placeholder="Stock Quantity" /></td>
-                <td><input type="number" name="Price" value={formData.Price} onChange={handleChange} placeholder="Price" /></td>
+                <td><input type="number" name="UnitPrice" value={formData.UnitPrice} onChange={handleChange} placeholder="Unit Price" /></td>
                 <td style={{ textAlign: 'right' }}>
                   <button onClick={handleSave} title="Save" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px', border: 'none', background: 'none', padding: '2px 8px', fontSize: '1em', cursor: 'pointer', outline: 'none' }}>✔</button>
                   <button onClick={handleCancel} title="Cancel" style={{ display: 'inline-block', verticalAlign: 'middle', border: 'none', background: 'none',  padding: '2px 8px', fontSize: '1em', cursor: 'pointer', outline: 'none' }}>✖</button>
@@ -281,10 +292,11 @@ export default function ProductTable() {
               <tr key={row.ProductID}>
                 {editingId === row.ProductID ? (
                   <>
-                    <td><input type="text" name="ProductID" value={editForm.ProductID} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '22px', width:"80px" }} /></td>
-                    <td><input type="text" name="ProductName" value={editForm.ProductName} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '22px', width:"80px" }} /></td>
+                    <td><input type="text" name="ProductID" value={editForm.ProductID} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '22px', width:"80px" }} disabled /></td>
+                    <td><input type="text" name="ProductName" value={editForm.ProductName} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '22px', width:"80px" }} disabled /></td>
+                    <td><input type="text" name="Category" value={editForm.Category} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '22px', width:"80px" }} /></td>
                     <td><input type="number" name="StockQuantity" value={editForm.StockQuantity} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '32px', width:"80px" }} /></td>
-                    <td><input type="number" name="Price" value={editForm.Price} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '32px', width:"80px" }} /></td>
+                    <td><input type="number" name="UnitPrice" value={editForm.UnitPrice} onChange={handleEditChange} style={{ padding: '2px 6px', fontSize: '1em', height: '32px', width:"80px" }} /></td>
                     <td style={{ textAlign: 'right' }}>
                       <button onClick={() => handleEditSave(row.ProductID)} title="Save" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px', border: 'none', background: 'none', padding: '2px 8px', fontSize: '1em', cursor: 'pointer', outline: 'none'}}>✔</button>
                       <button onClick={handleEditCancel} title="Cancel" style={{ display: 'inline-block', verticalAlign:'middle'  ,border: 'none', background: 'none', padding: '2px 8px', fontSize: '1em', cursor: 'pointer', outline: 'none'}}>✖</button>
@@ -294,8 +306,9 @@ export default function ProductTable() {
                   <>
                     <td style={{ cursor: 'pointer' }} onClick={() => handleProductClick(row)}>{row.ProductID}</td>
                     <td>{row.ProductName}</td>
+                    <td>{row.Category}</td>
                     <td>{row.StockQuantity}</td>
-                    <td>{row.Price}</td>
+                    <td>{row.UnitPrice}</td>
                     <td>
                       <button onClick={e => { e.stopPropagation(); handleEdit(row.ProductID); }} title="Edit" style={{ border: 'none', background: 'none', padding: '2px 6px', marginRight: '2px', fontSize: '1.5em', cursor: 'pointer', outline: 'none', }}>✏</button>
                       <button onClick={e => { e.stopPropagation(); handleDelete(row.ProductID); }} title="Delete" style={{ border: 'none', background: 'none', padding: '2px 6px', fontSize: '1.5em', cursor: 'pointer', outline: 'none', }}>🗑</button>

@@ -15,6 +15,8 @@ const NewRawMaterial = Loadable(lazy(() => import('sections/tables/bootstrap-tab
 const PurchaseTable = Loadable(lazy(() => import('sections/tables/bootstrap-table/purchase-table/PurchaseTable')));
 // const NewPurchase = Loadable(lazy(() => import ('section/tables/bootstrap-table/purchase-table/NewPurchase')))
 const NewPurchase = Loadable(lazy(() => import('sections/tables/bootstrap-table/purchase-table/NewPurchase')));
+const SupplierTable = Loadable(lazy(() => import('sections/tables/bootstrap-table/suppliers-table/SuppliersTable')));
+const SupplierDetails = Loadable(lazy(() => import('sections/tables/bootstrap-table/suppliers-table/SupplierDetails')));
 
 // ==============================|| TABLES ROUTING ||============================== //
 
@@ -71,7 +73,20 @@ const TablesRoutes = {
             {
               path: 'purchase-table/new',
               element: <NewPurchase/>
+            },
+            {
+              path: 'supplier-table',
+              element: <SupplierTable />
+            },
+            {
+              path: 'supplier-table/:id',
+              element: <SupplierDetails />
             }
+           ,
+           {
+             path: 'supplier-table/by-name/:supplierName',
+             element: <SupplierDetails />
+           }
            
           ]
         }

@@ -1,7 +1,5 @@
 import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
-
-// project-imports
 import MainCard from 'components/MainCard';
 
 // ==============================|| BASIC TABLE - PRODUCT TABLE ||============================== //

@@ -37,13 +37,10 @@ export default function Dashboard() {
 
       {/* Key Metrics */}
       <div style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
-        <MainCard title="Total Products" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalProducts}</MainCard>
-        <MainCard title="Total Raw Materials" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalRawMaterials}</MainCard>
-        <MainCard title="Total Sales" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalSales}</MainCard>
-        <MainCard title="Total Purchases" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalPurchases}</MainCard>
-        <MainCard title="Total Ideas" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalIdeas}</MainCard>
-        <MainCard title="Total Locations" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalLocations}</MainCard>
-        <MainCard title="Low Stock Alerts" style={{ flex: 1, textAlign: 'center', color: 'red' }}>{metrics.lowStock}</MainCard>
+    <MainCard title="Total Products" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalProducts}</MainCard>
+    <MainCard title="Total Raw Materials" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalRawMaterials}</MainCard>
+    <MainCard title="Total Sales" style={{ flex: 1, textAlign: 'center' }}>{metrics.totalSales}</MainCard>
+    <MainCard title="Low Stock Alerts" style={{ flex: 1, textAlign: 'center', color: 'red' }}>{metrics.lowStock}</MainCard>
       </div>
 
       {/* Charts & Visualizations (placeholders) */}

@@ -3,6 +3,7 @@ import MainCard from 'components/MainCard';
 import Table from "react-bootstrap/Table";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Purchase.css';
 
 const PurchaseTable = () => {
   const [purchase, setPurchase] = useState([]);
@@ -32,21 +33,19 @@ const PurchaseTable = () => {
     navigate('/tables/bootstrap-table/purchase-table/new');
   }
   return (
-       <MainCard title={
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{fontWeight:"bold",fontSize:"25px"}}>Purchases</span>
-          <input
-            type="text"
-            placeholder="Search...."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{ padding: '5px 10px', borderRadius: '15px', border: '1px solid #ccc', minWidth: '120px', marginLeft: '40px' }}
-          />
-          <button style={{border:"1px solid grey",backgroundColor:"grey",color:"white",width:"140px", textAlign:"center",borderRadius:"7px",fontSize:"17px"}} onClick={handleNewPurchaseClick}>Add Purchase</button>
-        </div>
-        
-      }
-    >
+    <MainCard title={
+      <div className="purchase-header">
+        <span className="purchase-header-title">Purchases</span>
+        <input
+          type="text"
+          placeholder="Search...."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="purchase-search"
+        />
+        <button className="purchase-add-btn" onClick={handleNewPurchaseClick}>Add Purchase</button>
+      </div>
+    }>
       <Table responsive>
         <thead>
           <tr>

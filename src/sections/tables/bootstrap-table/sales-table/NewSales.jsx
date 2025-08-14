@@ -1,6 +1,7 @@
 import MainCard from 'components/MainCard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Sales.css';
 
 export default function NewSales() {
   const [form, setForm] = useState({
@@ -12,6 +13,20 @@ export default function NewSales() {
     Sale_Date: '',
     Total_Amount: '' 
   });
+  const [productNameEditable, setProductNameEditable] = useState(false);
+    const [productIDs, setProductIDs] = useState([]);
+    const [productDropdownOpen, setProductDropdownOpen] = useState(false);
+  useEffect(() => {
+    // Fetch product IDs and names from backend
+    fetch('http://localhost:8000/products')
+      .then((res) => res.json())
+      .then((products) => {
+        setProductIDs(products.map((p) => ({ id: p.ProductID, name: p.ProductName })));
+      })
+      .catch((err) => {
+        setProductIDs([]);
+      });
+  }, []);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -63,51 +78,103 @@ export default function NewSales() {
 
 
   return (
-    <div style={{ background: '#f5f5f5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <MainCard title={<span style={{ color: '#333',fontWeight:"bold" ,fontSize:"18px"}}>Add New Sales <button onClick={handleCancel} style={{marginLeft:"500px", fontSize:"23px",marginTop:"-60px",border:"none"}}>✖</button></span>  }   style={{ background: '#fff', color: '#333', width: '400px' }}> 
-
-        <form onSubmit={handleSubmit}>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
-              <label>Sales_ID</label>
-              <input name="Sales_ID" value={form.Sales_ID} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+    <div className="sales-container">
+      <MainCard
+        title={
+          <span className="sales-maincard-title">
+            Add New Sales
+            <button className="sales-cancel-btn" onClick={handleCancel}>✖</button>
+          </span>
+        }
+        style={{ background: '#fff', color: '#333', width: '400px' }}
+      >
+        <form className="sales-form" onSubmit={handleSubmit}>
+          <div className="sales-form-row">
+            <div className="sales-form-group">
+              <label className="sales-label">Sales_ID</label>
+              <input className="sales-input" name="Sales_ID" value={form.Sales_ID} onChange={handleChange} />
             </div>
-            <div style={{ flex: 1 }}>
-              <label>Product_ID</label>
-              <input name="Product_ID" value={form.Product_ID} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+            <div className="sales-form-group">
+              <label className="sales-label">Product_ID</label>
+                  <div className="sales-input-dropdown-container">
+                    <input
+                      className="sales-input sales-input-dropdown"
+                      name="Product_ID"
+                      value={form.Product_ID}
+                      onChange={handleChange}
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setProductDropdownOpen((open) => !open)}
+                      className="sales-dropdown-btn"
+                      tabIndex={-1}
+                    >
+                      ▼
+                    </button>
+                  </div>
+                  {productDropdownOpen && productIDs.length > 0 && (
+                    <div className="sales-dropdown-list">
+                      {productIDs.map((prod) => (
+                        <div
+                          key={prod.id}
+                          className="sales-dropdown-list-item"
+                          onMouseDown={() => {
+                            setForm((prev) => ({ ...prev, Product_ID: prod.id, Product_Name: prod.name }));
+                            setProductDropdownOpen(false);
+                          }}
+                        >
+                          {prod.id}
+                        </div>
+                      ))}
+                    </div>
+                  )}
             </div>
           </div>
-
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
-              <label>Product_Name</label>
-              <input name="Product_Name" value={form.Product_Name} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+          <div className="sales-form-row">
+            <div className="sales-form-group sales-input-dropdown-container">
+              <label className="sales-label">Product_Name</label>
+              <input
+                className="sales-input sales-input-dropdown"
+                name="Product_Name"
+                value={form.Product_Name}
+                onChange={handleChange}
+                readOnly={!productNameEditable}
+              />
+              <button
+                type="button"
+                onClick={() => setProductNameEditable((edit) => !edit)}
+                className="sales-dropdown-btn sales-edit-btn"
+                tabIndex={-1}
+                title={productNameEditable ? 'Lock' : 'Edit'}
+              >
+                {productNameEditable ? '🔒' : '✎'}
+              </button>
             </div>
-            <div style={{ flex: 1 }}>
-              <label>Quantity Sold</label>
-              <input name="Quantity_Sold" value={form.Quantity_Sold} onChange={handleChange} type="number" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+            <div className="sales-form-group">
+              <label className="sales-label">Quantity Sold</label>
+              <input className="sales-input" name="Quantity_Sold" value={form.Quantity_Sold} onChange={handleChange} type="number" />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ flex: 1 }}>
-              <label>Unit_Price</label>
-              <input name="Unit_Price" value={form.Unit_Price} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+          <div className="sales-form-row">
+            <div className="sales-form-group">
+              <label className="sales-label">Unit_Price</label>
+              <input className="sales-input" name="Unit_Price" value={form.Unit_Price} onChange={handleChange} />
             </div>
-            <div style={{ flex: 1 }}>
-              <label>Sale_Date</label>
-              <input name="Sale_Date" type="date" value={form.Sale_Date} onChange={handleChange} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} />
+            <div className="sales-form-group">
+              <label className="sales-label">Sale_Date</label>
+              <input className="sales-input" name="Sale_Date" type="date" value={form.Sale_Date} onChange={handleChange} />
             </div>
           </div>
           {/* <div>
-            <label>Total_Amount</label>
-            <input name="Total_Amount" value={form.Total_Amount} onChange={handleChange} type="number" style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #555', background: 'white', color: 'black' }} /> 
+            <label className="sales-label">Total_Amount</label>
+            <input className="sales-input" name="Total_Amount" value={form.Total_Amount} onChange={handleChange} type="number" />
           </div><br /><br /> */}
-         
-          <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '8px', background: '#444', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1rem' }}>Submit</button>
+          <button type="submit" className="sales-submit-btn">Submit</button>
         </form>
       </MainCard>
     </div>
   );
 }
+
 
